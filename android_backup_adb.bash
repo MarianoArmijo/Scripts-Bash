@@ -8,8 +8,7 @@
 # Email: armijo.mariano@gmail.com
 
 DEVICE=($(adb get-state))
-ALMACENAMIENTO=/mnt/sdcard
-SEPARADOR=/
+ALMACENAMIENTO=/mnt/sdcard/
 
 function obtenerDirectorios {
 
@@ -20,7 +19,7 @@ function obtenerDirectorios {
 
 	# Creo un array con todos los elementos que se encuentran
 	# en la ruta /mnt/sdcard
-	array_directorios=($(adb shell ls -R $ALMACENAMIENTO$SEPARADOR))
+	array_directorios=($(adb shell ls -R $ALMACENAMIENTO))
 
 	num_ficheros=0
 
@@ -65,7 +64,7 @@ function seleccionFicheros {
 
 	echo -e && echo -e "Selecciona los ficheros que quieras guardar." && echo -e "\a"
 
-	array_ficheros=($(adb shell ls $ALMACENAMIENTO$SEPARADOR))
+	array_ficheros=($(adb shell ls $ALMACENAMIENTO))
 
 	num_ficheros_1=0
 
@@ -73,7 +72,7 @@ function seleccionFicheros {
 	# de la ruta /mnt/sdcard
 	for i in ${array_ficheros[*]}
 	do
-	num_ficheros_1=$((num_ficheros_1+1))
+	num_ficheros_1=$((num_ficheros_1++))
 	echo -e "$num_ficheros_1 $i"
 	done
 
@@ -104,18 +103,19 @@ function crearDirectorioBackup {
 
 	# Designo una variable indicando dónde y con que nombre
 	# se va a crear el directorio donde se almacenara el backup
-	directorio_bak=$RUTA$SEPARADOR$NOMBRE_DIR
+	directorio_bak=$RUTA$NOMBRE_DIR
 	echo -e "Creando directorio $directorio_bak"
 	mkdir $directorio_bak
 }
 
 function copiarContenidos {
 
-	echo -e && echo -e "Copiando ficheros al directorio $directorio_bak" && echo -e
-	adb pull -p $ALMACENAMIENTO$SEPARADOR $directorio_bak
+	echo -e "El tamaño del backup es de `adb shell du -sh $ALMACENAMIENTO`"
+	echo -e "Copiando ficheros al directorio $directorio_bak\n"
+	adb pull -p $ALMACENAMIENTO $directorio_bak
 
-	echo -e && echo -e "El número de elementos copiados es de $num_ficheros"
-	echo -e && echo -e "OK, backup finalizado." && echo -e
+	echo -e "\n\nEl número de elementos copiados es de $num_ficheros"
+	echo -e "\nOK, backup finalizado.\n"
 }
 
 if [ $DEVICE = device ]
