@@ -12,10 +12,9 @@ ALMACENAMIENTO=/mnt/sdcard/
 
 function obtenerDirectorios {
 
-	echo -e && echo -e "Se está accediendo al directorio $ALMACENAMIENTO"
-	echo -e && echo -e "Este proceso puede demorar algunos segundos"
-	echo -e && echo -e "Por favor espere..."
-	echo -e && echo -e "\a"
+	echo -e "\nSe está accediendo al directorio $ALMACENAMIENTO"
+	echo -e "\nEste proceso puede demorar algunos segundos"
+	echo -e "\nPor favor espere...\a"
 
 	# Creo un array con todos los elementos que se encuentran
 	# en la ruta /mnt/sdcard
@@ -34,23 +33,23 @@ function obtenerDirectorios {
 
 function seleccionarContenidos {
 
-	echo -e && echo -e "¿Desea hacer un backup completo? <S/n> \a"
+	echo -e "\n¿Desea hacer un backup completo? <S/n> \a"
 	read respuesta
 
-	if [ $respuesta = S ] || [ $respuesta = s ]
+	if [[ $respuesta == "S" ]] || [[ $respuesta == "s" ]]
 
 		then
 		clear
 
 		else
-		if [ $respuesta = N ] || [ $respuesta = n ]
+		if [[ $respuesta == "N" ]] || [[ $respuesta == "n" ]]
 
 			then
 			seleccionFicheros
 
 			else
-			echo -e && echo -e "Respuesta '$respuesta' incorrecta \a"
-			echo -e && echo -e "Pulse una tecla para salir."
+			echo -e "\nRespuesta '$respuesta' incorrecta \a"
+			echo -e "\nPulse una tecla para salir."
 			read
 			clear
 			exit 0
@@ -62,10 +61,9 @@ function seleccionarContenidos {
 # En pruebas
 function seleccionFicheros {
 
-	echo -e && echo -e "Selecciona los ficheros que quieras guardar." && echo -e "\a"
+	echo -e "\nSelecciona los ficheros que quieras guardar.\n\a"
 
 	array_ficheros=($(adb shell ls $ALMACENAMIENTO))
-
 	num_ficheros_1=0
 
 	# Recupero la lista de directorios y ficheros
@@ -84,8 +82,8 @@ function seleccionFicheros {
 		echo -e "Fichero $fichero"
 
 		else
-		echo -e && echo -e "Selección '$fichero' incorrecta \a"
-		echo -e && echo -e "Pulse una tecla para salir."
+		echo -e "\nSelección '$fichero' incorrecta \a"
+		echo -e "\nPulse una tecla para salir."
 		read
 		clear
 		exit 0
@@ -103,7 +101,7 @@ function crearDirectorioBackup {
 
 	# Designo una variable indicando dónde y con que nombre
 	# se va a crear el directorio donde se almacenara el backup
-	directorio_bak=$RUTA$NOMBRE_DIR
+	directorio_bak=$RUTA/$NOMBRE_DIR/
 	echo -e "Creando directorio $directorio_bak"
 	mkdir $directorio_bak
 }
@@ -118,7 +116,7 @@ function copiarContenidos {
 	echo -e "\nOK, backup finalizado.\n"
 }
 
-if [ $DEVICE = device ]
+if [[ $DEVICE == "device" ]]
 
 	then
 	clear
@@ -129,8 +127,7 @@ if [ $DEVICE = device ]
 	echo -e "FIN. \a"
 
 	else
-	echo -e "Ups algo falla..."
-	echo -e "Instala los drivers del dispositivo, activa el modo de depuración, conéctalo y desbloquealo."
+	echo -e "Ups algo falla...\nInstala los drivers del dispositivo, activa el modo de depuración, conéctalo y desbloquealo.\a"
 fi
 
 exit 0
